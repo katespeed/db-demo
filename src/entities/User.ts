@@ -18,6 +18,6 @@ export class User {
   @Column({ default: 0 })
   profileViews: number;
 
-  @OneToMany(() => Review, (review) => review.user, { cascade: ['insert', 'update'] })
+  @OneToMany(() => Review, (review) => review.user)
   reviews: Relation<Review>[];
 }
