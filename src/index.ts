@@ -1,7 +1,6 @@
 import './config';
 import 'express-async-errors';
 import express, { Express } from 'express';
-
 import session from 'express-session';
 import connectSqlite3 from 'connect-sqlite3';
 import {
@@ -11,6 +10,7 @@ import {
   getAllUserProfiles,
   resetProfileViews,
   updateUserEmail,
+  setNewName,
 } from './controllers/UserController';
 
 const app: Express = express();
@@ -38,6 +38,7 @@ app.post('/api/users/profileViews/reset', resetProfileViews); // Log in to an ac
 app.get('/api/users', getAllUserProfiles);
 app.get('/api/users/:targetUserId', getUserProfileData);
 app.post('/api/users/:targetUserId/email', updateUserEmail);
+app.post('/api/users/:targetUserId/name', setNewName);
 
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);

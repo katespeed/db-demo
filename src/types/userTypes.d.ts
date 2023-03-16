@@ -6,3 +6,8 @@ type AuthRequest = {
 type UserIdParam = {
   targetUserId: string;
 };
+
+type UserBody = {
+  firstName: string;
+  lastName: string;
+};

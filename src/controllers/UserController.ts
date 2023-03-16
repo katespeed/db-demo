@@ -9,6 +9,7 @@ import {
   allUserData,
   resetAllProfileViews,
   updateEmailAddress,
+  updateName,
 } from '../models/UserModel';
 import { parseDatabaseError } from '../utils/db-utils';
 
@@ -17,14 +18,14 @@ async function getAllUserProfiles(req: Request, res: Response): Promise<void> {
 }
 
 async function registerUser(req: Request, res: Response): Promise<void> {
-  const { email, password } = req.body as AuthRequest;
+  const { firstName, lastName } = req.body as UserBody;
 
   // IMPORTANT: Hash the password
-  const passwordHash = await argon2.hash(password);
+  //   const passwordHash = await argon2.hash(password);
 
   try {
     // IMPORTANT: Store the `passwordHash` and NOT the plaintext password
-    const newUser = await addUser(email, passwordHash);
+    const newUser = await addUser(firstName, lastName);
     console.log(newUser);
     res.sendStatus(201);
   } catch (err) {
@@ -152,6 +153,33 @@ async function updateUserEmail(req: Request, res: Response): Promise<void> {
   res.sendStatus(200);
 }
 
+async function setNewName(req: Request, res: Response): Promise<void> {
+  const { targetUserId } = req.params as UserIdParam;
+  const { firstName, lastName } = req.body as UserBody;
+
+  const { isLoggedIn, authenticatedUser } = req.session;
+  if (!isLoggedIn || authenticatedUser.userId !== targetUserId) {
+    res.sendStatus(403); // 403 Forbidden
+    return;
+  }
+  const user = await getUserById(targetUserId);
+  if (!user) {
+    res.sendStatus(404); // 404 Not Found
+    return;
+  }
+  try {
+    await updateName(user, firstName, lastName);
+  } catch (err) {
+    // The email was taken so we need to send an error message
+    console.error(err);
+    const databaseErrorMessage = parseDatabaseError(err);
+    res.status(500).json(databaseErrorMessage);
+    return;
+  }
+
+  res.sendStatus(200);
+}
+
 export {
   registerUser,
   logIn,
@@ -159,4 +187,5 @@ export {
   getAllUserProfiles,
   resetProfileViews,
   updateUserEmail,
+  setNewName,
 };

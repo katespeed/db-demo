@@ -6,10 +6,16 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
-  @Column({ unique: true })
+  @Column({ default: '' })
+  firstName: string;
+
+  @Column({ default: '' })
+  lastName: string;
+
+  @Column({ default: '' })
   email: string;
 
-  @Column({ unique: true })
+  @Column({ default: '' })
   passwordHash: string;
 
   @Column({ default: false })

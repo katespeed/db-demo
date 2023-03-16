@@ -3,11 +3,11 @@ import { User } from '../entities/User';
 
 const userRepository = AppDataSource.getRepository(User);
 
-async function addUser(email: string, passwordHash: string): Promise<User> {
+async function addUser(firstName: string, lastName: string): Promise<User> {
   // Create the new user object
   let newUser = new User();
-  newUser.email = email;
-  newUser.passwordHash = passwordHash;
+  newUser.firstName = firstName;
+  newUser.lastName = lastName;
 
   // Then save it to the database
   // NOTES: We reassign to `newUser` so we can access
@@ -72,6 +72,21 @@ async function updateEmailAddress(userId: string, newEmail: string): Promise<voi
     .execute();
 }
 
+async function updateName(user: User, firstName: string, lastName: string): Promise<User> {
+  // Update the user's first/last name
+  const updatedUser = user;
+  updatedUser.firstName = firstName;
+  updatedUser.lastName = lastName;
+  await userRepository
+    .createQueryBuilder()
+    .update(User)
+    .set({ firstName: user.firstName })
+    .set({ lastName: user.lastName })
+    .where({ userId: updatedUser.userId })
+    .execute();
+  return updatedUser;
+}
+
 export {
   addUser,
   getUserByEmail,
@@ -81,4 +96,5 @@ export {
   allUserData,
   resetAllProfileViews,
   updateEmailAddress,
+  updateName,
 };
