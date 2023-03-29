@@ -40,6 +40,10 @@ app.get('/api/users/:targetUserId', getUserProfileData);
 app.post('/api/users/:targetUserId/email', updateUserEmail);
 app.post('/api/users/:targetUserId/name', setNewName);
 
+// app.post('api/books', addNewBook);
+// app.post('api/books/:bookId/reviews', addNewReview);
+// app.get('api/books/:bookId/reviews', addReviewsForBook);
+
 app.listen(PORT, () => {
   console.log(`Listening at http://localhost:${PORT}`);
 });

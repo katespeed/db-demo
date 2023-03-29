@@ -14,6 +14,12 @@ export class Review {
   @Column()
   reviewText: string;
 
+  @Column()
+  byUser: UserIdParam;
+
+  @Column()
+  forBook: Book;
+
   @ManyToOne(() => User, (user) => user.reviews)
   user: Relation<User>[];
 

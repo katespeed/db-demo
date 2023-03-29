@@ -14,13 +14,13 @@ import { Author } from './Author';
 @Entity()
 export class Book {
   @PrimaryGeneratedColumn('uuid')
-  bookiId: string;
+  bookId: string;
 
   @Column()
   title: string;
 
   @Column({ nullable: true })
-  pubkicationYear: number;
+  publshidYear: number;
 
   @OneToMany(() => Review, (review) => review.user)
   reviews: Relation<Review>[];
